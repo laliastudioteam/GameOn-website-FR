@@ -19,6 +19,7 @@ body {
   font-size: 18px;
   max-width: 1300px;
   margin: 0 auto;
+
 }
 
 p {
@@ -199,6 +200,16 @@ input {
   padding: 8px;
   border: 0.8px solid #ccc;
   outline: none;
+}
+.error{
+
+  color:#f00;
+  font-size: 14px;
+}
+.success{
+
+  color:green;
+  font-size: 14px;
 }
 .text-control {
   margin: 0;
@@ -462,6 +473,7 @@ input[data-error]::after {
   height: 100%;
   display: block;
   padding: 0;
+  object-fit: cover;
 }
 .copyrights {
   color: #fe142f;
