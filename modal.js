@@ -31,67 +31,91 @@ function closeModal() {
 
 // checks before submit
 function validate(event) {
-
 	// Prevent Form to validate
 	event.preventDefault();
 
 	// Empty error count
 	let errorForm = 0;
-	// Empty error content
-	const errorAlerts = ["first-error", "last-error","email-error","quantity-error","location-error","check-error"];
 
-	errorAlerts.forEach(function (item) {
-		document.getElementById(item).textContent = "";
-	});
-
+	// Fix error Variables
 	const minFirst = 2;
 	const minLast = 2;
 
+	// Empty error content
+	const errorAlerts = [
+		[
+			"first",
+			"Le champs prénom ne contient pas au moins " + minFirst + " caractères",
+		],
+		["last", "Le champs nom ne contient pas au moins " + minLast + " caractères"],
+		["email", "Le champs email est de forme invalide"],
+		["quantity", "Le champs quantité doit être un nombre"],
+		["location1", "Le champs location doit être coché"],
+		["checkbox1", "Vous devez accepter les conditions générales"],
+	];
+	let errorDataInput;
 
+	// Boucle
+	errorAlerts.forEach(function (item) {
+	
+
+		errorDataInput = document.getElementById(item[0]).closest(".formData");
+		errorDataInput.setAttribute("data-error", item[1]);
+		errorDataInput.setAttribute("data-error-visible", "false");
+		console.log("Checking : " + item[0] + " set to '" + item[1] + "'");
+	});
+
+	// Check variables
+	let inputToSet;
+	let inputToTest;
+
+	// Function with value
+	function setErrorInput(inputToSet, field) {
+		inputToSet.setAttribute("data-error-visible", "true");
+		errorForm++;
+		console.log("Field : " + field + " error set to visible");
+	}
 
 	// Check prenom
-	let checkFirst = document.getElementById("first").value;
+	inputToTest="first";
+	let checkFirst = document.getElementById(inputToTest);
 
-	if (checkFirst.length < minFirst) {
-		let firstErrorMessage =
-			"Le champs prénom ne contient pas au moins " + minFirst + " caractères";
-		document.getElementById("first-error").textContent = firstErrorMessage;
-		errorForm++;
+	if (checkFirst.value.length < minFirst) {
+		setErrorInput(checkFirst.closest(".formData"), inputToTest);
 	}
 
 	// Check nom
-	let checkLast = document.getElementById("last").value;
+	inputToTest="last";
+	let checkLast = document.getElementById(inputToTest);
 
-	if (checkLast.length < minLast) {
-		let lastErrorMessage =
-			"Le champs nom ne contient pas au moins " + minLast + " caractères";
-		document.getElementById("last-error").textContent = lastErrorMessage;
-		errorForm++;
+	if (checkLast.value.length < minLast) {
+		setErrorInput(checkLast.closest(".formData"), inputToTest);
 	}
 
 	// Check mail
-	let checkEmail = document.getElementById("email").value;
+	inputToTest="email";
+	let checkEmail = document.getElementById(inputToTest)
 
 	const regularExpressionEmailCheck =
 		/^(([^<>()[]\.,;:s@]+(.[^<>()[]\.,;:s@]+)*)|(.+))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
 
-	if (!regularExpressionEmailCheck.test(checkEmail)) {
-		let EmailErrorMessage = "Le champs email est de forme invalide";
-		document.getElementById("email-error").textContent = EmailErrorMessage;
-		errorForm++;
+	if (!regularExpressionEmailCheck.test(checkEmail.value)) {
+		setErrorInput(checkEmail.closest(".formData"), inputToTest);
 	}
 
 	// Check quantity
-	let checkQuantity = document.getElementById("quantity").value;
+	inputToTest="quantity";
+	let checkQuantity = document.getElementById(inputToTest);
 
-	if (checkQuantity=="" || (isNaN(checkQuantity))) {
-		let QuantityErrorMessage = "Le champs quantité doit être un nombre";
-		document.getElementById("quantity-error").textContent = QuantityErrorMessage;
-		errorForm++;
+
+	if (checkQuantity.value == "" || isNaN(checkQuantity.value)) {
+		setErrorInput(checkQuantity.closest(".formData"), inputToTest);
 	}
 
 	// Check location
+	inputToTest="location1";
 	let checkLocation = document.getElementsByName("location");
+	let checkLocationId = document.getElementById("location1", inputToTest);
 	let radiochecked = 0;
 
 	for (let radio of checkLocation) {
@@ -100,24 +124,20 @@ function validate(event) {
 		}
 	}
 	if (radiochecked < 1) {
-		let LocationErrorMessage = "Le champs location doit être coché";
-		document.getElementById("location-error").textContent = LocationErrorMessage;
-		errorForm++;
+		setErrorInput(checkLocationId.closest(".formData"), inputToTest);
 	}
 
-  // Check general conditions
+	// Check general conditions
+	inputToTest="checkbox1";
+	let checkCheckbox = document.getElementById(inputToTest);
 
-  let checkCheckbox = document.getElementById("checkbox1");
-
-	if (checkCheckbox.checked==false) {
-		let CheckErrorMessage = "Vous devez accepter les conditions générales";
-		document.getElementById("check-error").textContent = CheckErrorMessage;
-		errorForm++;
+	if (checkCheckbox.checked == false) {
+		setErrorInput(checkCheckbox.closest(".formData"), inputToTest);
 	}
 
 	// Check if error to submit .. or not
 	if (errorForm == 0) {
-    let ValidationMessage = "Merci ! Votre réservation a été reçue.";
+		let ValidationMessage = "Merci ! Votre réservation a été reçue.";
 		document.getElementById("validation-message").textContent = ValidationMessage;
 		//document.getElementById('theForm').submit();
 	} else {

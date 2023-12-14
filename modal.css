@@ -201,15 +201,9 @@ input {
   border: 0.8px solid #ccc;
   outline: none;
 }
-.error{
-
-  color:#f00;
-  font-size: 14px;
-}
 .success{
-
-  color:green;
-  font-size: 14px;
+  color:#fff;
+  font-size: 36px;
 }
 .text-control {
   margin: 0;
@@ -237,12 +231,12 @@ input {
 .formData[data-error-visible="true"] .text-control {
   border: 2px solid #e54858;
 }
-/* 
+ 
 input[data-error]::after {
     content: attr(data-error);
-    font-size: 0.4em;
+    font-size: 0.6em;
     color: red;
-} */
+} 
 .checkbox-label,
 .checkbox2-label {
   position: relative;
