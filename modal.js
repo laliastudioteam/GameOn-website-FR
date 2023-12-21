@@ -1,15 +1,8 @@
-function editNav() {
-	const x = document.getElementById("myTopnav");
-	if (x.className === "topnav") {
-		x.className += " responsive";
-	} else {
-		x.className = "topnav";
-	}
-}
+
 
 // DOM Elements
 const modalbg = document.querySelector(".bground");
-const modalBtn = document.querySelector(".modal-btn");
+const modalBtn = document.querySelectorAll(".modal-btn");
 const closeBtn = document.querySelector(".close-btn");
 const closeBtnSuccess = document.querySelector(".close-btn-success");
 const formData = document.querySelector(".formData");
@@ -34,7 +27,7 @@ const errorAlerts = {
 	birthdate: ["La date de naissance est invalide"],
 	quantity: [
 		"Le champs quantité doit être un nombre positif",
-		"Le champs quantité ne peut être négatif",
+		"Le champs quantité ne peut être négatif"
 	],
 	location1: ["Le champs location doit être coché"],
 	checkbox1: ["Vous devez accepter les conditions générales"],
@@ -43,8 +36,8 @@ const errorAlerts = {
 let errorDataInput;
 
 // Boucle
-
 for (let errorMessageKey in errorAlerts) {
+
 	// Get Elements By ID;
 	checkById[errorMessageKey] = document.getElementById(errorMessageKey);
 	errorDataInput = document.getElementById(errorMessageKey).closest(".formData");
@@ -52,7 +45,8 @@ for (let errorMessageKey in errorAlerts) {
 }
 
 // launch modal event
-modalBtn.addEventListener("click", launchModal);
+modalBtn.forEach(item =>item.addEventListener("click", launchModal));
+
 
 // close modal event
 closeBtn.addEventListener("click", closeModal);
@@ -65,6 +59,20 @@ formDomSubmit.addEventListener("click", validate);
 
 // close success
 closeBtnSuccess.addEventListener("click", closeSuccess);
+
+// close success
+navBtn.addEventListener("click", editNav);
+
+
+// edit nav
+function editNav() {
+	const x = document.getElementById("myTopnav");
+	if (x.className === "topnav") {
+		x.className += " responsive";
+	} else {
+		x.className = "topnav";
+	}
+}
 
 // launch modal form
 function launchModal() {
@@ -100,6 +108,7 @@ validationMessageZone.textContent = ValidationMessageText;
 
 // checks before submit
 function validate(event) {
+
 	// Prevent Form to validate
 	event.preventDefault();
 
@@ -108,9 +117,9 @@ function validate(event) {
 
 	let errorDataInput;
 
-	// Boucle
-
+	// Boucle error messages
 	for (let errorMessageKey in errorAlerts) {
+
 		// Get Elements By ID;
 		checkById[errorMessageKey] = document.getElementById(errorMessageKey);
 		errorDataInput = document.getElementById(errorMessageKey).closest(".formData");
@@ -127,19 +136,16 @@ function validate(event) {
 	}
 
 	// Check prenom
-
 	if (checkById["first"].value.length < minFirst) {
 		setErrorInput(checkById["first"].closest(".formData"), "first");
 	}
 
 	// Check nom
-
 	if (checkById["last"].value.length < minLast) {
 		setErrorInput(checkById["last"].closest(".formData"), "last");
 	}
 
 	// Check mail
-
 	const regularExpressionEmailCheck =
 		/^(([^<>()[]\.,;:s@]+(.[^<>()[]\.,;:s@]+)*)|(.+))@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}])|(([a-zA-Z-0-9]+.)+[a-zA-Z]{2,}))$/;
 
@@ -148,7 +154,6 @@ function validate(event) {
 	}
 
 	// Check Birthdate
-
 	let dateObj = new Date(checkById["birthdate"].value);
 
 	if (checkById["birthdate"].value == "" || isNaN(dateObj)) {
@@ -156,13 +161,11 @@ function validate(event) {
 	}
 
 	// Check quantity
-
 	if (checkById["quantity"].value == "" || isNaN(checkById["quantity"].value)) {
 		setErrorInput(checkById["quantity"].closest(".formData"), "quantity");
 	}
 
 	// Check location
-
 	let checkLocation = document.getElementsByName("location");
 	let radiochecked = 0;
 
@@ -176,7 +179,6 @@ function validate(event) {
 	}
 
 	// Check general conditions
-
 	if (checkById["checkbox1"].checked == false) {
 		setErrorInput(checkById["checkbox1"].closest(".formData"), "checkbox");
 	}
