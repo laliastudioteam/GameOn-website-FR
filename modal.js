@@ -26,11 +26,16 @@ const checkById = [];
 
 // Empty error content
 const errorAlerts = {
-	first: ["Le champs prénom ne contient pas au moins " + minFirst + " caractères"],
+	first: [
+		"Le champs prénom ne contient pas au moins " + minFirst + " caractères",
+	],
 	last: ["Le champs nom ne contient pas au moins " + minLast + " caractères"],
 	email: ["Le champs email est de forme invalide"],
 	birthdate: ["La date de naissance est invalide"],
-	quantity: ["Le champs quantité doit être un nombre positif","Le champs quantité ne peut être négatif"],
+	quantity: [
+		"Le champs quantité doit être un nombre positif",
+		"Le champs quantité ne peut être négatif",
+	],
 	location1: ["Le champs location doit être coché"],
 	checkbox1: ["Vous devez accepter les conditions générales"],
 };
@@ -44,7 +49,7 @@ for (let errorMessageKey in errorAlerts) {
 	checkById[errorMessageKey] = document.getElementById(errorMessageKey);
 	errorDataInput = document.getElementById(errorMessageKey).closest(".formData");
 	errorDataInput.setAttribute("data-error", errorAlerts[errorMessageKey][0]);
-};
+}
 
 // launch modal event
 modalBtn.addEventListener("click", launchModal);
@@ -110,8 +115,7 @@ function validate(event) {
 		checkById[errorMessageKey] = document.getElementById(errorMessageKey);
 		errorDataInput = document.getElementById(errorMessageKey).closest(".formData");
 		errorDataInput.setAttribute("data-error-visible", "false");
-
-	};
+	}
 
 	// Check variables
 	let inputToTest;
