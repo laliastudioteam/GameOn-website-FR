@@ -1,13 +1,11 @@
 function editNav() {
-	var x = document.getElementById("myTopnav");
+	const x = document.getElementById("myTopnav");
 	if (x.className === "topnav") {
 		x.className += " responsive";
 	} else {
 		x.className = "topnav";
 	}
 }
-
-console.log("start code");
 
 // DOM Elements
 const modalbg = document.querySelector(".bground");
@@ -16,11 +14,37 @@ const closeBtn = document.querySelector(".close-btn");
 const closeBtnSuccess = document.querySelector(".close-btn-success");
 const formData = document.querySelector(".formData");
 const formDomSubmit = document.querySelector(".btn-submit");
-
+const quantityInput = document.getElementById("quantity");
 const formZone = document.getElementById("theForm");
 const validationMessage = document.getElementById("validationMessage");
 const validationMessageZone = document.getElementById("validationMessageZone");
-console.log("Message zone initialisé");
+
+// Fix error Variables
+const minFirst = 2;
+const minLast = 2;
+const checkById = [];
+
+// Empty error content
+const errorAlerts = {
+	first: ["Le champs prénom ne contient pas au moins " + minFirst + " caractères"],
+	last: ["Le champs nom ne contient pas au moins " + minLast + " caractères"],
+	email: ["Le champs email est de forme invalide"],
+	birthdate: ["La date de naissance est invalide"],
+	quantity: ["Le champs quantité doit être un nombre positif","Le champs quantité ne peut être négatif"],
+	location1: ["Le champs location doit être coché"],
+	checkbox1: ["Vous devez accepter les conditions générales"],
+};
+
+let errorDataInput;
+
+// Boucle
+
+for (let errorMessageKey in errorAlerts) {
+	// Get Elements By ID;
+	checkById[errorMessageKey] = document.getElementById(errorMessageKey);
+	errorDataInput = document.getElementById(errorMessageKey).closest(".formData");
+	errorDataInput.setAttribute("data-error", errorAlerts[errorMessageKey][0]);
+};
 
 // launch modal event
 modalBtn.addEventListener("click", launchModal);
@@ -28,11 +52,14 @@ modalBtn.addEventListener("click", launchModal);
 // close modal event
 closeBtn.addEventListener("click", closeModal);
 
-// close modal event
-closeBtnSuccess.addEventListener("click", closeSuccess);
+// quantity input negative check live
+quantityInput.addEventListener("change", checkNegative);
 
 // sumbit form
 formDomSubmit.addEventListener("click", validate);
+
+// close success
+closeBtnSuccess.addEventListener("click", closeSuccess);
 
 // launch modal form
 function launchModal() {
@@ -44,8 +71,17 @@ function closeModal() {
 	modalbg.style.display = "none";
 }
 
+function checkNegative() {
+	if (quantityInput.value != "" && !isNaN(quantityInput.value)) {
+		if (quantityInput.value <= 0) {
+			alert(errorAlerts["quantity"][0]);
+			quantityInput.value = 0;
+		}
+	}
+}
+
 // Messages
-const ValidationMessage = "Merci ! Votre réservation a été reçue.";
+const ValidationMessageText = "Merci ! Votre réservation a été reçue.";
 
 // close modal form
 function closeSuccess() {
@@ -55,8 +91,7 @@ function closeSuccess() {
 	validationMessage.classList.add("success_visible");
 }
 
-console.log("test de validation chargé :" + ValidationMessage);
-validationMessageZone.textContent = ValidationMessage;
+validationMessageZone.textContent = ValidationMessageText;
 
 // checks before submit
 function validate(event) {
@@ -66,38 +101,17 @@ function validate(event) {
 	// Empty error count
 	let errorForm = 0;
 
-	// Fix error Variables
-	const minFirst = 2;
-	const minLast = 2;
-	const checkById = [];
-
-	// Empty error content
-	const errorAlerts = [
-		[
-			"first",
-			"Le champs prénom ne contient pas au moins " + minFirst + " caractères",
-		],
-		["last", "Le champs nom ne contient pas au moins " + minLast + " caractères"],
-		["email", "Le champs email est de forme invalide"],
-		["birthdate", "La date de naissance est invalide"],
-		["quantity", "Le champs quantité doit être un nombre"],
-		["location1", "Le champs location doit être coché"],
-		["checkbox1", "Vous devez accepter les conditions générales"],
-	];
-
 	let errorDataInput;
 
 	// Boucle
-	errorAlerts.forEach(function (item) {
+
+	for (let errorMessageKey in errorAlerts) {
 		// Get Elements By ID;
-
-		checkById[item[0]] = document.getElementById(item[0]);
-
-		errorDataInput = document.getElementById(item[0]).closest(".formData");
-		errorDataInput.setAttribute("data-error", item[1]);
+		checkById[errorMessageKey] = document.getElementById(errorMessageKey);
+		errorDataInput = document.getElementById(errorMessageKey).closest(".formData");
 		errorDataInput.setAttribute("data-error-visible", "false");
-		console.log("Checking : " + item[0] + " set to '" + item[1] + "'");
-	});
+
+	};
 
 	// Check variables
 	let inputToTest;
@@ -106,7 +120,6 @@ function validate(event) {
 	function setErrorInput(inputToSet, field) {
 		inputToSet.setAttribute("data-error-visible", "true");
 		errorForm++;
-		console.log(field + " field error data text set to visible");
 	}
 
 	// Check prenom
